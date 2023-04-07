@@ -7,8 +7,8 @@ before_install:
 
 script:
   - docker run -e CI=true vinaykumar785557/react-test npm test
+  # - docker run USERNAME/react-test npm test -- --coverage
 
-# - docker run USERNAME/react-test npm test -- --coverage
 # use ctrl+/ to add a comment in yaml file.
 
 after_success:
@@ -16,3 +16,11 @@ after_success:
   - docker build -t vinaykumar785557/multi-nginx ./nginx
   - docker build -t vinaykumar785557/multi-server ./server
   - docker build -t vinaykumar785557/multi-worker ./worker
+  # log in to the docker cli
+  # put your login details in travis ci environmental variable
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take those images and push them to your docker hub
+  - docker push vinaykumar785557/multi-client
+  - docker push vinaykumar785557/multi-nginx
+  - docker push vinaykumar785557/multi-server
+  - docker push vinaykumar785557/multi-worker
